@@ -1,0 +1,2146 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Employee Task Management REST API",
+    "version": "1.0.0",
+    "description": "REST API documentation for Employee Task Management application with JWT security."
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/api/tasks/{id}": {
+      "get": {
+        "summary": "Get task by ID",
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "getTaskById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                },
+                "examples": {
+                  "getTaskByIdSuccess": {
+                    "summary": "Get Task By ID - Success",
+                    "value": {
+                      "id": 1,
+                      "title": "Implement Login API",
+                      "description": "Create login endpoint using JWT",
+                      "status": "PENDING",
+                      "priority": "HIGH",
+                      "dueDate": "2026-08-10",
+                      "assignedUserId": 17,
+                      "assignedUserName": "zohaib"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "getTaskByIdAuthenticationFailed": {
+                    "summary": "Get Task By ID - Authentication Failed",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T10:14:22.04642"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "getTaskByIdAccessDenied": {
+                    "summary": "Get Task By ID - Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-07T10:10:04.673576"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Task not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "getTaskByIdNotFound": {
+                    "summary": "Get Task By ID - Task Not Found",
+                    "value": {
+                      "message": "Task not found",
+                      "status": 404,
+                      "timestamp": "2026-08-07T12:44:43.081885"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update task details",
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "updateTask",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                },
+                "examples": {
+                  "updateTaskSuccessAdminToken": {
+                    "summary": "Update Task - Success Admin token",
+                    "value": {
+                      "id": 3,
+                      "title": "Complete Spring Security",
+                      "description": "Implement JWT authentication",
+                      "status": "PENDING",
+                      "priority": "HIGH",
+                      "dueDate": "2026-08-15",
+                      "assignedUserId": 18,
+                      "assignedUserName": "amash"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error or invalid priority/status enum",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskCannotAssignToAdmin": {
+                    "summary": "Update Task - Cannot Assign To Admin",
+                    "value": {
+                      "message": "Task can only be assigned to employees",
+                      "status": 400,
+                      "timestamp": "2026-08-07T11:58:12.019669"
+                    }
+                  },
+                  "updateTaskInvalidPriority": {
+                    "summary": "Update Task - Invalid Priority",
+                    "value": {
+                      "message": "Invalid priority. Allowed values: HIGH, LOW, MEDIUM",
+                      "status": 400,
+                      "timestamp": "2026-08-07T11:58:27.27979"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskNoToken": {
+                    "summary": "Update Task - No token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T11:57:24.764987"
+                    }
+                  },
+                  "updateTaskInvalidToken": {
+                    "summary": "Update Task - Invalid token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T11:57:38.222514"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskEmployeeTokenAccessDenied": {
+                    "summary": "Update Task - Employee token Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-07T11:57:57.93571"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Task or assigned employee not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskUserNotFound": {
+                    "summary": "Update Task - User Not Found",
+                    "value": {
+                      "message": "User not found",
+                      "status": 404,
+                      "timestamp": "2026-08-07T11:58:43.564154"
+                    }
+                  },
+                  "updateTaskTaskNotFound": {
+                    "summary": "Update Task - Task Not Found",
+                    "value": {
+                      "message": "Task not found",
+                      "status": 404,
+                      "timestamp": "2026-08-07T11:58:55.533559"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete task",
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "deleteTask",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                },
+                "examples": {
+                  "deleteTaskSuccessAdminToken": {
+                    "summary": "Delete Task - Success Admin token",
+                    "value": {
+                      "message": "Task deleted successfully",
+                      "timestamp": "2026-08-07T12:43:20"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "deleteTaskNoToken": {
+                    "summary": "Delete Task - No token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T12:48:22.056422"
+                    }
+                  },
+                  "deleteTaskInvalidToken": {
+                    "summary": "Delete Task - Invalid token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T12:46:48.827212"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "deleteTaskEmployeeTokenAccessDenied": {
+                    "summary": "Delete Task - Employee token Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-07T12:46:11.462851"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Task not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "deleteTaskTaskNotFound": {
+                    "summary": "Delete Task - Task Not Found",
+                    "value": {
+                      "message": "Task not found",
+                      "status": 404,
+                      "timestamp": "2026-08-07T12:44:43.081885"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks/{id}/status": {
+      "put": {
+        "summary": "Update task status",
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "updateTaskStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTaskStatusRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                },
+                "examples": {
+                  "updateTaskStatusSuccessEmployeeToken": {
+                    "summary": "Update Task Status - Success Employee token",
+                    "value": {
+                      "id": 5,
+                      "title": "Implement Frontend React Welcome Page",
+                      "description": "Create Footer and Header",
+                      "status": "IN_PROGRESS",
+                      "priority": "MEDIUM",
+                      "dueDate": "2026-08-10",
+                      "assignedUserId": 19,
+                      "assignedUserName": "taqu"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid status enum value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskStatusInvalidStatus": {
+                    "summary": "Update Task Status - Invalid Status",
+                    "value": {
+                      "message": "Invalid status. Allowed values: PENDING, IN_PROGRESS, COMPLETED",
+                      "status": 400,
+                      "timestamp": "2026-08-07T17:14:35.817284"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskStatusNoToken": {
+                    "summary": "Update Task Status - No Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T17:17:19.12418"
+                    }
+                  },
+                  "updateTaskStatusSuccessEmployeeToken": {
+                    "summary": "Update Task Status - Success Employee token",
+                    "value": {
+                      "message": "You are not authorized to update this task",
+                      "status": 401,
+                      "timestamp": "2026-08-07T17:10:33.24749"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires EMPLOYEE role or access denied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskStatusAdminToken": {
+                    "summary": "Update Task Status - Admin Token",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-07T17:16:25.75252"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Task not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateTaskStatusTaskNotFound": {
+                    "summary": "Update Task Status - Task Not Found",
+                    "value": {
+                      "message": "Task not found",
+                      "status": 404,
+                      "timestamp": "2026-08-07T17:09:05.338205"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/employees/{id}": {
+      "get": {
+        "summary": "Get employee by ID",
+        "tags": [
+          "employee-controller"
+        ],
+        "operationId": "getEmployeeById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeResponse"
+                },
+                "examples": {
+                  "viewEmployeeByIdSuccess": {
+                    "summary": "View Employee By Id - Success",
+                    "value": {
+                      "id": 14,
+                      "name": "Hania Ahmad",
+                      "email": "whohaniadsd12@gmail.com",
+                      "role": "Hania Ahmad"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewEmployeeByIdInvalidToken": {
+                    "summary": "View Employee By Id - Invalid Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T15:56:44.675308"
+                    }
+                  },
+                  "viewEmployeeByIdNoToken": {
+                    "summary": "View Employee By Id - No Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T15:54:19.308195"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewEmployeeByIdEmployeeAccessDenied": {
+                    "summary": "View Employee By Id - Employee Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-06T16:07:02.837292"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Employee not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "getEmployeeByIdNotFound": {
+                    "summary": "Get Employee By ID - User Not Found",
+                    "value": {
+                      "message": "User Not Found",
+                      "status": 404,
+                      "timestamp": "2026-08-06T15:47:30.522364"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Resource conflict or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewEmployeeByIdUserNotFound": {
+                    "summary": "View Employee By Id - User Not Found",
+                    "value": {
+                      "message": "User Not Found",
+                      "status": 409,
+                      "timestamp": "2026-08-06T15:47:30.522364"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update employee details",
+        "tags": [
+          "employee-controller"
+        ],
+        "operationId": "updateEmployee",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEmployeeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeResponse"
+                },
+                "examples": {
+                  "updateEmployeeSuccess": {
+                    "summary": "Update Employee \u2013 Success",
+                    "value": {
+                      "id": 15,
+                      "name": "John Wick",
+                      "email": "johh@gmail.com",
+                      "role": "EMPLOYEE"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalidEmailFormat": {
+                    "summary": "Invalid Email Format",
+                    "value": {
+                      "message": "Invalid email format",
+                      "status": 400,
+                      "timestamp": "2026-08-06T18:36:31.780541"
+                    }
+                  },
+                  "emptyEmail": {
+                    "summary": "Empty Email",
+                    "value": {
+                      "message": "Email cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T18:35:26.340668"
+                    }
+                  },
+                  "emptyName": {
+                    "summary": "Empty Name",
+                    "value": {
+                      "message": "Name cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T18:34:38.619514"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalidToken": {
+                    "summary": "Invalid Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T18:39:08.066583"
+                    }
+                  },
+                  "noToken": {
+                    "summary": "No Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T18:37:56.007883"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "employeeAccessDenied": {
+                    "summary": "Employee Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-06T18:40:14.804908"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Employee not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "updateEmployeeNotFound": {
+                    "summary": "Update Employee - User Not Found",
+                    "value": {
+                      "message": "User Not Found",
+                      "status": 404,
+                      "timestamp": "2026-08-06T18:32:20.22668"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Resource conflict or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "duplicateEmail": {
+                    "summary": "Duplicate Email",
+                    "value": {
+                      "message": "Email already exists",
+                      "status": 409,
+                      "timestamp": "2026-08-06T18:33:26.862069"
+                    }
+                  },
+                  "userNotFound": {
+                    "summary": "User Not Found",
+                    "value": {
+                      "message": "User Not Found",
+                      "status": 409,
+                      "timestamp": "2026-08-06T18:32:20.22668"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete employee",
+        "tags": [
+          "employee-controller"
+        ],
+        "operationId": "deleteEmployee",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResponse"
+                },
+                "examples": {
+                  "deleteEmployeeSuccessfully": {
+                    "summary": "Delete Employee Successfully",
+                    "value": {
+                      "message": "Employee deleted successfully",
+                      "timestamp": "2026-08-06T19:04:09"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalidToken": {
+                    "summary": "Invalid Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T19:11:12.486206"
+                    }
+                  },
+                  "noToken": {
+                    "summary": "No Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T19:10:08.76878"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role or admin deletion forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "deleteEmployeeSuccessfully": {
+                    "summary": "Delete Employee Successfully",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-06T19:15:20.767833"
+                    }
+                  },
+                  "deleteAdminNotAllowed": {
+                    "summary": "Delete Admin Not Allowed",
+                    "value": {
+                      "message": "Admin cannot be deleted",
+                      "status": 403,
+                      "timestamp": "2026-08-06T19:06:53.249775"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Employee not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "deleteEmployeeNotFound": {
+                    "summary": "Delete Employee - User Not Found",
+                    "value": {
+                      "message": "User Not Found",
+                      "status": 404,
+                      "timestamp": "2026-08-06T19:05:43.966663"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Resource conflict or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "userNotFound": {
+                    "summary": "User Not Found",
+                    "value": {
+                      "message": "User Not Found",
+                      "status": 409,
+                      "timestamp": "2026-08-06T19:05:43.966663"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks": {
+      "get": {
+        "summary": "Get all tasks",
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "getAllTasks",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  }
+                },
+                "examples": {
+                  "viewAllTaskSuccessAdminToken": {
+                    "summary": "View All Task - Success  Admin token",
+                    "value": [
+                      {
+                        "id": 1,
+                        "title": "Implement Login API",
+                        "description": "Create login endpoint using JWT",
+                        "status": "PENDING",
+                        "priority": "HIGH",
+                        "dueDate": "2026-08-10",
+                        "assignedUserId": 17,
+                        "assignedUserName": "zohaib"
+                      }
+                    ]
+                  },
+                  "viewAllTasksSuccessAdminTokenNoTasks": {
+                    "summary": "View All Tasks - Success Admin token No Tasks",
+                    "value": []
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewAllTasksNoToken": {
+                    "summary": "View All Tasks - No token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T10:14:22.04642"
+                    }
+                  },
+                  "viewAllTasksInvalidToken": {
+                    "summary": "View All Tasks - Invalid token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T10:12:39.233898"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewAllTasksEmployeeTokenAccessDenied": {
+                    "summary": "View All Tasks - Employee token Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-07T10:10:04.673576"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new task",
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "createTask",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskResponse"
+                },
+                "examples": {
+                  "createTaskByAdminTokenSuccess": {
+                    "summary": "Create Task - By Admin(token) Success",
+                    "value": {
+                      "id": 1,
+                      "title": "Implement Login API",
+                      "description": "Create login endpoint using JWT",
+                      "status": "PENDING",
+                      "priority": "HIGH",
+                      "dueDate": "2026-08-10",
+                      "assignedUserId": 17,
+                      "assignedUserName": "zohaib"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error or invalid priority/status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createTaskEmptyTitle": {
+                    "summary": "Create Task - Empty Title",
+                    "value": {
+                      "message": "Title cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T23:23:45.960045"
+                    }
+                  },
+                  "createTaskEmptyDescription": {
+                    "summary": "Create Task - Empty Description",
+                    "value": {
+                      "message": "Title cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T23:29:00.721133"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createTaskNoToken": {
+                    "summary": "Create Task - No Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T23:03:19.505755"
+                    }
+                  },
+                  "createTaskInvalidToken": {
+                    "summary": "Create Task - Invalid Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T23:02:28.529716"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createTaskByEmployeeTokenAccessDenied": {
+                    "summary": "Create Task - By Employee(token) Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-06T23:01:13.413435"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Assigned employee not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createTaskUserNotFound": {
+                    "summary": "Create Task - Assigned User Not Found",
+                    "value": {
+                      "message": "User not found",
+                      "status": 404,
+                      "timestamp": "2026-08-06T23:21:12.182218"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Resource conflict or user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createTaskInvalidUserId": {
+                    "summary": "Create Task - Invalid User ID",
+                    "value": {
+                      "message": "User not found",
+                      "status": 409,
+                      "timestamp": "2026-08-06T23:21:12.182218"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/employees": {
+      "get": {
+        "summary": "Get all employees",
+        "tags": [
+          "employee-controller"
+        ],
+        "operationId": "getAllEmployees",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmployeeResponse"
+                  }
+                },
+                "examples": {
+                  "viewAllEmployeesSuccessAdminToken": {
+                    "summary": "View All Employees - Success (Admin token)",
+                    "value": [
+                      {
+                        "id": 3,
+                        "name": "Amash Ahmad",
+                        "email": "amash@gmail.com",
+                        "role": "EMPLOYEE"
+                      },
+                      {
+                        "id": 4,
+                        "name": "Hania Ahmad",
+                        "email": "hania@gmail.com",
+                        "role": "EMPLOYEE"
+                      },
+                      {
+                        "id": 10,
+                        "name": "John Doe",
+                        "email": "john@gmail.com",
+                        "role": "EMPLOYEE"
+                      },
+                      {
+                        "id": 11,
+                        "name": "Joh",
+                        "email": "joh@gmail.com",
+                        "role": "EMPLOYEE"
+                      }
+                    ]
+                  },
+                  "viewAllEmployeesSuccessAdminTokenNoEmployee": {
+                    "summary": "View All Employees - Success (Admin token) No Employee",
+                    "value": [
+                      {
+                        "id": 3,
+                        "name": "Amash Ahmad",
+                        "email": "amash@gmail.com",
+                        "role": "EMPLOYEE"
+                      },
+                      {
+                        "id": 4,
+                        "name": "Hania Ahmad",
+                        "email": "hania@gmail.com",
+                        "role": "EMPLOYEE"
+                      },
+                      {
+                        "id": 10,
+                        "name": "John Doe",
+                        "email": "john@gmail.com",
+                        "role": "EMPLOYEE"
+                      },
+                      {
+                        "id": 11,
+                        "name": "Joh",
+                        "email": "joh@gmail.com",
+                        "role": "EMPLOYEE"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewAllEmployeesInvalidToken": {
+                    "summary": "View All Employees - Invalid token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T12:52:56.578528"
+                    }
+                  },
+                  "viewAllEmployeesNoToken": {
+                    "summary": "View All Employees - No token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T12:51:51.735019"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewAllEmployeesEmployeeTokenAccessDenied": {
+                    "summary": "View All Employees - Employee token Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-06T14:13:06.159028"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new employee",
+        "tags": [
+          "employee-controller"
+        ],
+        "operationId": "createEmployee",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmployeeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployeeResponse"
+                },
+                "examples": {
+                  "createEmployeeByAdminSuccess": {
+                    "summary": "Create Employee - By Admin Success",
+                    "value": {
+                      "id": 11,
+                      "name": "Joh",
+                      "email": "joh@gmail.com",
+                      "role": "EMPLOYEE"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createEmployeeShortPassword": {
+                    "summary": "Create Employee - Short Password",
+                    "value": {
+                      "message": "Password must be at least 8 characters",
+                      "status": 400,
+                      "timestamp": "2026-08-06T11:52:24.055892"
+                    }
+                  },
+                  "createEmployeeEmptyPassword": {
+                    "summary": "Create Employee - Empty Password",
+                    "value": {
+                      "message": "Password cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T11:50:52.588675"
+                    }
+                  },
+                  "createEmployeeInvalidEmailFormat": {
+                    "summary": "Create Employee - Invalid Email Format",
+                    "value": {
+                      "message": "Invalid email format",
+                      "status": 400,
+                      "timestamp": "2026-08-06T11:48:26.048088"
+                    }
+                  },
+                  "createEmployeeEmptyEmail": {
+                    "summary": "Create Employee - Empty Email",
+                    "value": {
+                      "message": "Email cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T11:46:11.056449"
+                    }
+                  },
+                  "createEmployeeEmptyName": {
+                    "summary": "Create Employee - Empty Name",
+                    "value": {
+                      "message": "Name cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T11:43:18.978131"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createEmployeeInvalidToken": {
+                    "summary": "Create Employee - Invalid Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T11:56:31.050204"
+                    }
+                  },
+                  "createEmployeeNoToken": {
+                    "summary": "Create Employee - No Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T11:55:13.708823"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createEmployeeByEmployeeAccessDenied": {
+                    "summary": "Create Employee - By Employee Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-06T10:32:23.256834"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Employee with given email already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "createEmployeeDuplicateEmail": {
+                    "summary": "Create Employee - Duplicate Email",
+                    "value": {
+                      "message": "Employee Already Exist",
+                      "status": 409,
+                      "timestamp": "2026-08-06T11:40:00.345107"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                },
+                "examples": {
+                  "registerAdminSuccess": {
+                    "summary": "Register Admin  - Success",
+                    "value": {
+                      "message": "User registered successfully",
+                      "userId": 9,
+                      "email": "whohania12@gmail.com",
+                      "role": "ADMIN"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "registerEmptyPassword": {
+                    "summary": "Register - Empty Password",
+                    "value": {
+                      "message": "Password cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T02:11:51.404855"
+                    }
+                  },
+                  "registerInvalidEmailFormat": {
+                    "summary": "Register - Invalid Email Format",
+                    "value": {
+                      "message": "Invalid email format",
+                      "status": 400,
+                      "timestamp": "2026-08-06T02:09:02.502435"
+                    }
+                  },
+                  "registerEmptyName": {
+                    "summary": "Register - Empty Name",
+                    "value": {
+                      "message": "Name cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T02:06:27.710201"
+                    }
+                  },
+                  "registerEmptyEmail": {
+                    "summary": "Register - Empty Email",
+                    "value": {
+                      "message": "Email cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T02:07:55.050257"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "registerInvalidToken": {
+                    "summary": "Register - Invalid Token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T02:18:29.576493"
+                    }
+                  },
+                  "registerAdminSuccess": {
+                    "summary": "Register Admin  - Success",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-06T02:16:09.959423"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires ADMIN role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "registerAccessDenied": {
+                    "summary": "Register - Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-06T02:20:36.26191"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - User already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "registerAdminSuccess": {
+                    "summary": "Register Admin  - Success",
+                    "value": {
+                      "message": "User Already Exist",
+                      "status": 409,
+                      "timestamp": "2026-08-06T02:04:23.548743"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "Authenticate user and get JWT token",
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                },
+                "examples": {
+                  "loginAdminSuccess": {
+                    "summary": "Login - Admin Success",
+                    "value": {
+                      "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3ODU5NjA1MDIsImV4cCI6MTc4NjA0NjkwMn0.dN-nkznZJqfwt--e7wlEsduFM0B7Sw0jj7fcTkam6Gdt1nxHFgReLN93edFthGSXtiihPs8wdizZKPM2YC-hqg",
+                      "role": "ADMIN",
+                      "userId": 1,
+                      "userName": "admin@gmail.com"
+                    }
+                  },
+                  "loginEmployeeSuccess": {
+                    "summary": "Login - Employee Success",
+                    "value": {
+                      "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbWFzaEBnbWFpbC5jb20iLCJyb2xlIjoiRU1QTE9ZRUUiLCJpYXQiOjE3ODU5NjA3MjgsImV4cCI6MTc4NjA0NzEyOH0.GBnSzx5xXsQ3Km0hLM3-bFLindMBrKwxX70gpE9eXK8Y3SDwuo2XKwcZX1BDYwo1isvnvmzHU6qQ3U2RencydA",
+                      "role": "EMPLOYEE",
+                      "userId": 3,
+                      "userName": "amash@gmail.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "loginEmptyEmail": {
+                    "summary": "Login - Empty Email",
+                    "value": {
+                      "message": "Email cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T01:48:09.386852"
+                    }
+                  },
+                  "loginEmptyPassword": {
+                    "summary": "Login - Empty Password",
+                    "value": {
+                      "message": "Password cannot be empty",
+                      "status": 400,
+                      "timestamp": "2026-08-06T01:52:49.748169"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid email or password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "loginInvalidPasswordOrEmail": {
+                    "summary": "Login - Invalid Password Or Email",
+                    "value": {
+                      "message": "Invalid email or password",
+                      "status": 401,
+                      "timestamp": "2026-08-06T01:45:00.422965"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tasks/my-tasks": {
+      "get": {
+        "summary": "Get tasks assigned to current user",
+        "tags": [
+          "task-controller"
+        ],
+        "operationId": "getMyTasks",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TaskResponse"
+                  }
+                },
+                "examples": {
+                  "viewMyTasksSuccessEmployeeToken": {
+                    "summary": "View My Tasks - Success Employee token",
+                    "value": [
+                      {
+                        "id": 4,
+                        "title": "Implement Login API",
+                        "description": "Create login endpoint using JWT",
+                        "status": "PENDING",
+                        "priority": "HIGH",
+                        "dueDate": "2026-08-10",
+                        "assignedUserId": 17,
+                        "assignedUserName": "zohaib"
+                      }
+                    ]
+                  },
+                  "viewMyTasksSuccessEmployeeTokenNoTasks": {
+                    "summary": "View My Tasks - Success Employee token No Tasks",
+                    "value": []
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid JWT token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewMyTasksNoToken": {
+                    "summary": "View My Tasks - No token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T16:17:27.466374"
+                    }
+                  },
+                  "viewMyTasksInvalidToken": {
+                    "summary": "View My Tasks - Invalid token",
+                    "value": {
+                      "message": "Authentication failed",
+                      "status": 401,
+                      "timestamp": "2026-08-07T16:16:12.874565"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden - Requires EMPLOYEE role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "viewMyTasksAdminTokenAccessDenied": {
+                    "summary": "View My Tasks - Admin token Access Denied",
+                    "value": {
+                      "message": "Access denied. You do not have permission to access this resource.",
+                      "status": 403,
+                      "timestamp": "2026-08-07T16:15:24.423722"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "TaskRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "MEDIUM",
+              "HIGH"
+            ]
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "assignedUserId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "assignedUserId",
+          "description",
+          "dueDate",
+          "priority",
+          "title"
+        ]
+      },
+      "TaskResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string"
+          },
+          "dueDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "assignedUserId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "assignedUserName": {
+            "type": "string"
+          },
+          "assignedTo": {
+            "type": "string"
+          },
+          "createdAT": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UpdateTaskStatusRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "TODO",
+              "IN_PROGRESS",
+              "DONE"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "UpdateEmployeeRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "email",
+          "name"
+        ]
+      },
+      "EmployeeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "EmployeeRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 2147483647,
+            "minLength": 8
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "password"
+        ]
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 2147483647,
+            "minLength": 8
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "password"
+        ]
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userName": {
+            "type": "string"
+          }
+        }
+      },
+      "DeleteResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
