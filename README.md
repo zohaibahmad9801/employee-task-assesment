@@ -198,6 +198,8 @@ docker-compose up --build backend
 docker-compose up --build frontend
 ```
 
+> **Note**: For production deployments (e.g. Vercel), set the `VITE_BACKEND_URL` environment variable to point to your live backend API URL (defaults to `http://localhost:8080/api`).
+
 ---
 
 ## API Documentation & Testing Collections
