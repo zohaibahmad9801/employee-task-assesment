@@ -326,4 +326,4 @@ docker-compose up --build frontend
 3. **Employee Self-Management Permissions**: Employees are restricted to viewing tasks assigned specifically to them (`/api/tasks/my-tasks`) and updating the status field of their assigned tasks. They cannot edit task titles, descriptions, priorities, or assignees.
 4. **Admin Account Protection**: No admin account can be deleted via the API. The `DELETE /api/employees/{id}` endpoint throws a `403 Forbidden` error if the target user has the `ADMIN` role.
 5. **JWT Token Lifecycle**: JWT tokens are signed using HMAC-SHA (algorithm determined by key length) with a configured secret key and expire after 50 minutes (3,000,000 ms).
-6. **CORS Policy**: The backend allows cross-origin requests only from `http://localhost:5173`. To deploy to a different frontend URL, update the `CorsConfiguration` in `SecurityConfig.java`.
+6. **CORS Policy**: The backend CORS origins are dynamically configured via `application.yaml` (`app.cors.allowed-origins`) defaulting to `http://localhost:5173`. To deploy to a different frontend URL (e.g. Vercel), set the `CORS_ALLOWED_ORIGINS` environment variable (comma-separated for multiple origins).
