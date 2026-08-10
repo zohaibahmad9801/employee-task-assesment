@@ -124,7 +124,7 @@ Once all containers are running, the services will be available at:
 | :--- | :--- |
 | **Frontend** | http://localhost:5173 |
 | **Backend API** | http://localhost:8080 |
-| **MySQL** | `localhost:3306` (DB: `task_db`, user: `root`, pass: `zohaib`) |
+| **MySQL** | `localhost:3306` (DB: `task_db`, user: `root`, pass: `root`) |
 
 ### Seed the First Admin (Required on First Run)
 After containers start, run this **once** to insert the initial Admin account:
