@@ -5,18 +5,32 @@ A full-stack RESTful web application built with **Spring Boot 3** (Backend) and 
 ---
 
 ## Table of Contents
-1. [Project Overview & Features](#project-overview--features)
-2. [Tech Stack Used](#tech-stack-used)
-3. [Docker Compose — Quick Start (Recommended)](#docker-compose--quick-start-recommended)
-4. [Database Setup Details](#database-setup-details)
-5. [Default Admin Credentials & Seed Instructions](#default-admin-credentials--seed-instructions)
-6. [Backend Setup Steps](#backend-setup-steps)
-7. [Frontend Setup Steps](#frontend-setup-steps)
-8. [API Documentation & Testing Collections](#api-documentation--testing-collections)
-9. [Important API Endpoints](#important-api-endpoints)
-10. [Usage Flow](#usage-flow)
-11. [Screenshots & Key Pages](#screenshots--key-pages)
-12. [Assumptions Made](#assumptions-made)
+1. [Live Production Deployment](#live-production-deployment)
+2. [Project Overview & Features](#project-overview--features)
+3. [Tech Stack Used](#tech-stack-used)
+4. [Docker Compose — Quick Start (Recommended)](#docker-compose--quick-start-recommended)
+5. [Database Setup Details](#database-setup-details)
+6. [Default Admin Credentials & Seed Instructions](#default-admin-credentials--seed-instructions)
+7. [Backend Setup Steps](#backend-setup-steps)
+8. [Frontend Setup Steps](#frontend-setup-steps)
+9. [API Documentation & Testing Collections](#api-documentation--testing-collections)
+10. [Important API Endpoints](#important-api-endpoints)
+11. [Usage Flow](#usage-flow)
+12. [Screenshots & Key Pages](#screenshots--key-pages)
+13. [Assumptions Made](#assumptions-made)
+
+---
+
+## Live Production Deployment
+
+| Service | Live URL | Hosting Platform |
+| :--- | :--- | :--- |
+| **Frontend Web App** | [https://employee-task-assesment.vercel.app](https://employee-task-assesment.vercel.app) | Vercel |
+| **Backend REST API** | [https://employee-task-assesment.onrender.com](https://employee-task-assesment.onrender.com) | Render |
+| **Database** | Managed MySQL 8.0 | Clever Cloud |
+
+> **Important Note for Reviewers**:  
+> The backend is hosted on **Render's Free Instance Tier**, which automatically spins down during periods of inactivity. If the live app has been idle, the initial request or login attempt may take **~50 seconds** while Render cold-starts the backend container. All subsequent requests will process at normal high speed.
 
 ---
 

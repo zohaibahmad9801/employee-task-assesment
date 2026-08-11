@@ -35,3 +35,8 @@ build/
 
 # Logs
 *.log
+
+# Personal files & exports
+*.html
+*.pdf
+
